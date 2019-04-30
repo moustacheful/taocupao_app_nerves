@@ -54,19 +54,23 @@ env MIX_TARGET=target mix firmware
 env MIX_TARGET=target mix firmware.burn
 ```
 
-#### Remote deployment
+### Remote operation and deployment
 
-Will use `keys/taocupao.pem` private key.
-Public keys should go on the `keys` directory and will all be included automatically (as long as they have a `.pub` extension).
+Where HOSTNAME = the domain defined on each remote device. See the respective target config on `/config`, where each should have a `mdns_domain` corresponding to this HOSTNAME
+
+For this to work you must:
+
+- Put `keys/taocupao.pem` private key and `keys/taocupao.pub` public key (they will all be included automatically -- as long as they have a `.pub` extension).
+- Be in the same wifi connection as the devices. If this the first time installing the firmware, refer to the "Building and burning to sd"
+
+#### Remote deployment
 
 ```bash
 env MIX_TARGET=rpi mix firmware
-env MIX_TARGET=rpi ./upload.sh
+env MIX_TARGET=rpi ./upload.sh HOSTNAME
 ```
 
 #### Remote inspection
-
-Where HOSTNAME = the domain defined on each remote device. See the respective target config on `/config`, where each should have a `mdns_domain` corresponding to this HOSTNAME
 
 ```bash
 ssh -i ./keys/taocupao.pem HOSTNAME
@@ -76,15 +80,17 @@ This will put you in iex (interactive elixir) remotely.
 
 ##### Useful commands
 
+For any command that requires an `input`, this corresponds to the input on the arduino.
+
 `RingLogger.attach`: Start logging for the application to your iex instance.
 
-`Tracker.inspect(index)`: Prints the currrent state for a particular tracker (sensor)
+`Tracker.inspect(input)`: Prints the currrent state for a particular tracker (sensor)
 
-`Tracker.set_threshold(index, value)`: Sets a new threshold for a particular sensor. This does not persist, and is just temporary
+`Tracker.set_threshold(input, value)`: Sets a new threshold for a particular sensor
 
-`Tracker.start_log(index)`: Starts logging the current values being read from arduino
+`Tracker.start_log(input)`: Starts logging the current values being read from arduino
 
-`Tracker.stop_log(index)`: Stops logging the current values being read from arduino
+`Tracker.stop_log(input)`: Stops logging the current values being read from arduino
 
 ## Targets
 
