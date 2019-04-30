@@ -4,27 +4,32 @@
 
 ## Installation
 
-Install required packages
+#### Install nerves and required dependencies
 
-```bash
-sudo apt install build-essential automake autoconf git squashfs-tools ssh-askpass
-```
+https://hexdocs.pm/nerves/installation.html
 
-Elixir 18, erlang 21?.
+The application requires Elixir v1.8
 
-Install nerves bootstrap
-
-```bash
-mix archive.install hex nerves_bootstrap
-```
-
-Install dependencies
+#### Install dependencies
 
 ```bash
 mix deps.get
 ```
 
-## Running
+### Configuration
+
+Secrets are passed through the `secrets.exs` file within `/config` directory.
+
+Copy and rename `secrets.exs.example` for an example of what to setup.
+
+### Running
+
+After setting up the application, execute
+
+```sh
+docker-compose up # Brings any needed services up
+mix ecto.migrate # Only needed once to run migrations on the db
+```
 
 ### Development, host machine
 
@@ -34,7 +39,13 @@ iex -S mix
 
 ### Deploying to targets
 
-Where target = your target, eg: rpi0, rpi, rpi2, rpi3
+Where target = your target, eg: `rpi0`, `rpi`, `rpi2`, `rpi3`
+
+You may need to install dependencies for a particular target as well
+
+```bash
+
+```
 
 #### Building and burning to sd
 
@@ -45,19 +56,13 @@ env MIX_TARGET=target mix firmware.burn
 
 #### Remote deployment
 
-Will use `~/.ssh/taocupao` private key.
-Public keys should go on the `keys` directory and will all be included automatically.
+Will use `keys/taocupao.pem` private key.
+Public keys should go on the `keys` directory and will all be included automatically (as long as they have a `.pub` extension).
 
 ```bash
 env MIX_TARGET=rpi mix firmware
 env MIX_TARGET=rpi ./upload.sh
 ```
-
-### Configuration
-
-Secrets are passed through the `secrets.exs` file within `/config` directory.
-
-Copy and rename `secrets.exs.example` for an example of what to setup.
 
 ## Targets
 
