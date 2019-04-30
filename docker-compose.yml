@@ -1,0 +1,22 @@
+version: "3.3"
+
+volumes:
+  postgres-data:
+    driver: local
+
+services:
+  psql:
+    image: postgres:9.5-alpine
+    ports:
+      - 6432:5432
+    environment:
+      POSTGRES_USER: "taocupao"
+      POSTGRES_PASSWORD: "taocupao"
+      POSTGRES_DB: "taocupao"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+  adminer:
+    image: adminer
+    ports:
+      - 2000:8080
